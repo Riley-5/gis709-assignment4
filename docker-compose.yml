@@ -1,0 +1,40 @@
+version: "3.8"
+
+volumes:
+  db-data:
+  geoserver-data:
+
+services:
+  db:
+    image: kartoza/postgis:14-3.3
+    environment:
+      - POSTGRES_DB=assignment4_db
+      - POSTGRES_USER=assignment4_db
+      - POSTGRES_PASS=assignment4_db
+      - POSTGRES_MULTIPLE_EXTENTIONS=postgis,postgis_topology,pgrouting
+    volumes:
+      - db-data:/var/lib/postgresql
+    ports:
+      - 25432:5432
+
+  geoserver:
+    image: kartoza/geoserver:2.21.1
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    ports:
+      - 9090:8080
+    depends_on:
+      - db
+    environment:
+      - GEOSERVER_ADMIN_USER=assignment4_geoserver
+      - GEOSEVER_ADMIN_PASSWORD=assignment4_geoserver
+
+  web:
+    build: ./
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 80:80
+    depends_on:
+      - db
+      - geoserver
