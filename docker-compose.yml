@@ -19,15 +19,15 @@ services:
 
   geoserver:
     image: kartoza/geoserver:2.21.1
-    volumes:
-      - geoserver-data:/opt/geoserver/data_dir
-    ports:
-      - 9090:8080
-    depends_on:
-      - db
     environment:
       - GEOSERVER_ADMIN_USER=assignment4_geoserver
-      - GEOSEVER_ADMIN_PASSWORD=assignment4_geoserver
+      - GEOSERVER_ADMIN_PASSWORD=assignment4_geoserver
+    volumes:
+      - geoserver-data:/opt/geoserver/
+    ports:
+      - 9090:8080
+    links:
+      - db:db
 
   web:
     build: ./
