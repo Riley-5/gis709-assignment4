@@ -13,7 +13,7 @@ const App = () => {
     */
 	useEffect(() => {
 		fetch(
-			"http://localhost:9090/geoserver/routes/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routes%3Aways&outputFormat=application%2Fjson"
+			"http://localhost:9090/geoserver/routes/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routes%3Ashortest_route&outputFormat=application%2Fjson&viewparams=source:549;target:415"
 		)
 			.then((response) => response.json())
 			.then((data) => setRoutes(data))
