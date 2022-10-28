@@ -4,7 +4,8 @@ import "./style.css"
 
 const App = () => {
 	// State to hold the roads
-	const [routes, setRoutes] = useState(null)
+	const [shortestRoute, setShortestRoute] = useState(null)
+	const [safestRoute, setSafestRoute] = useState(null)
 	const [startNearestVertex, setStartNearestVertex] = useState(190)
 	const [endNearestVertex, setEndNearestVertex] = useState(268)
 	const [startMarkerCoords, setStartMarkerCoords] = useState({
@@ -52,7 +53,7 @@ const App = () => {
 			})
 
 		/*
-			viewparams:
+			shortest route viewparams:
 			source -> starting node id
 			target -> end node id
 		*/
@@ -60,7 +61,18 @@ const App = () => {
 			`http://localhost:9090/geoserver/routes/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routes%3Ashortest_route&outputFormat=application%2Fjson&viewparams=source:${startNearestVertex};target:${endNearestVertex}`
 		)
 			.then((response) => response.json())
-			.then((data) => setRoutes(data))
+			.then((data) => setShortestRoute(data))
+
+		/*
+			safest route viewparams:
+			source -> starting id
+			target -> end node id
+		*/
+		fetch(
+			`http://localhost:9090/geoserver/routes/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routes%3Asafest_route&outputFormat=application%2Fjson&viewparams=source:${startNearestVertex};target:${endNearestVertex}`
+		)
+			.then((response) => response.json())
+			.then((data) => setSafestRoute(data))
 	}, [startMarkerCoords, startNearestVertex, endMarkerCoords, endNearestVertex])
 
 	const startMarkerRef = useRef(null)
@@ -89,8 +101,12 @@ const App = () => {
 		[]
 	)
 
-	const Route = (props) => {
-		return <GeoJSON data={props.routes} />
+	const ShortestRoute = (props) => {
+		return <GeoJSON data={props.shortestRoute} />
+	}
+
+	const SafestRoute = (props) => {
+		return <GeoJSON data={props.safestRoute} style={{ color: "green" }} />
 	}
 
 	return (
@@ -99,7 +115,8 @@ const App = () => {
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 			/>
-			<Route routes={routes} />
+			<ShortestRoute shortestRoute={shortestRoute} />
+			<SafestRoute safestRoute={safestRoute} />
 			<Marker
 				draggable={true}
 				eventHandlers={startMarkerEventHandlers}
