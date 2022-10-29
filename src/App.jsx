@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { GeoJSON, MapContainer, Marker, TileLayer } from "react-leaflet"
+import Legend from "./components/Legend"
 import "./style.css"
 
 const App = () => {
 	// State to hold the roads
+	const [mapState, setMapState] = useState(null)
 	const [shortestRoute, setShortestRoute] = useState(null)
 	const [safestRoute, setSafestRoute] = useState(null)
 	const [startNearestVertex, setStartNearestVertex] = useState(190)
@@ -127,7 +129,6 @@ const App = () => {
 	/*
 		When the form is submitted 
 		Set the form state value to an empty string 
-
 	*/
 	const handleSubmit = (event) => {
 		event.preventDefault()
@@ -191,9 +192,8 @@ const App = () => {
 					onChange={handleChange}
 				></input>
 				<input type="submit" value="Find Route"></input>
-				{/* <input type="submit" value="submit"></input> */}
 			</form>
-			<MapContainer center={[-25.7487, 28.238]} zoom={15}>
+			<MapContainer ref={setMapState} center={[-25.7487, 28.238]} zoom={15}>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -212,6 +212,7 @@ const App = () => {
 					position={endMarkerCoords}
 					ref={endMarkerRef}
 				></Marker>
+				<Legend mapState={mapState} />
 			</MapContainer>
 		</div>
 	)
