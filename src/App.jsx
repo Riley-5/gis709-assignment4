@@ -16,6 +16,10 @@ const App = () => {
 		lat: -25.7521842,
 		lng: 28.2328684
 	})
+	const [searchValue, setSearchValue] = useState({
+		startLocation: "",
+		endLocation: ""
+	})
 
 	/*
         Collect data from Geoserver
@@ -109,27 +113,107 @@ const App = () => {
 		return <GeoJSON data={props.safestRoute} style={{ color: "green" }} />
 	}
 
+	// When the input to the form changes update the forms state value
+	const handleChange = (event) => {
+		const { name, value } = event.target
+		setSearchValue((prevSearchValue) => {
+			return {
+				...prevSearchValue,
+				[name]: value
+			}
+		})
+	}
+
+	/*
+		When the form is submitted 
+		Set the form state value to an empty string 
+
+	*/
+	const handleSubmit = (event) => {
+		event.preventDefault()
+		// Rest form to be empty
+		setSearchValue({
+			startLocation: "",
+			endLocation: ""
+		})
+
+		findStartEndLocation(searchValue.startLocation, searchValue.endLocation)
+	}
+
+	/*
+		From the searched start and end locations searched
+		Query Nominatim and get the coordinates from the searched locations
+		Set the startMarkerCoords and endMarkerCoords to the lat and lng of the searched locations
+	*/
+	const findStartEndLocation = (start, end) => {
+		fetch(
+			`https://nominatim.openstreetmap.org/search?country=&q=${start}, South Africa&format=geojson`
+		)
+			.then((response) => response.json())
+			.then((data) => {
+				data.features.forEach((startPoint) => {
+					setStartMarkerCoords({
+						lat: startPoint.geometry.coordinates[1],
+						lng: startPoint.geometry.coordinates[0]
+					})
+				})
+			})
+
+		fetch(
+			`https://nominatim.openstreetmap.org/search?country=&q=${end}, South Africa&format=geojson`
+		)
+			.then((response) => response.json())
+			.then((data) => {
+				data.features.forEach((endPoint) => {
+					setEndMarkerCoords({
+						lat: endPoint.geometry.coordinates[1],
+						lng: endPoint.geometry.coordinates[0]
+					})
+				})
+			})
+	}
+
 	return (
-		<MapContainer center={[-25.7487, 28.238]} zoom={15}>
-			<TileLayer
-				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-			/>
-			<ShortestRoute shortestRoute={shortestRoute} />
-			<SafestRoute safestRoute={safestRoute} />
-			<Marker
-				draggable={true}
-				eventHandlers={startMarkerEventHandlers}
-				position={startMarkerCoords}
-				ref={startMarkerRef}
-			></Marker>
-			<Marker
-				draggable={true}
-				eventHandlers={endMarkerEventHandlers}
-				position={endMarkerCoords}
-				ref={endMarkerRef}
-			></Marker>
-		</MapContainer>
+		<div>
+			<form onSubmit={handleSubmit}>
+				<input
+					name="startLocation"
+					placeholder="Start Location"
+					type="text"
+					value={searchValue.startLocation}
+					onChange={handleChange}
+				></input>
+				<input
+					name="endLocation"
+					placeholder="End Location"
+					type="text"
+					value={searchValue.endLocation}
+					onChange={handleChange}
+				></input>
+				<input type="submit" value="Find Route"></input>
+				{/* <input type="submit" value="submit"></input> */}
+			</form>
+			<MapContainer center={[-25.7487, 28.238]} zoom={15}>
+				<TileLayer
+					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+				/>
+				<ShortestRoute shortestRoute={shortestRoute} />
+				<SafestRoute safestRoute={safestRoute} />
+				<Marker
+					draggable={true}
+					eventHandlers={startMarkerEventHandlers}
+					position={startMarkerCoords}
+					ref={startMarkerRef}
+				></Marker>
+				<Marker
+					draggable={true}
+					eventHandlers={endMarkerEventHandlers}
+					position={endMarkerCoords}
+					ref={endMarkerRef}
+				></Marker>
+			</MapContainer>
+		</div>
 	)
 }
 
