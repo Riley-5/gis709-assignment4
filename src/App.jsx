@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { GeoJSON, MapContainer, Marker, TileLayer } from "react-leaflet"
 import Legend from "./components/Legend"
+import SearchLocation from "./components/SearchLocation"
 import "./style.css"
 
 const App = () => {
@@ -18,14 +19,10 @@ const App = () => {
 		lat: -25.7521842,
 		lng: 28.2328684
 	})
-	const [searchValue, setSearchValue] = useState({
-		startLocation: "",
-		endLocation: ""
-	})
 
 	/*
-        Collect data from Geoserver
-        Set the routes state to the received data
+        Collect start and end node from Geoserver
+        Set the id of the found node to state
     */
 	useEffect(() => {
 		/*
@@ -57,7 +54,13 @@ const App = () => {
 					setEndNearestVertex(point.properties.id)
 				})
 			})
+	}, [startMarkerCoords, endMarkerCoords])
 
+	/*
+		Get the shortest and safest route based on the start and end nodes
+		Set the route to state
+	*/
+	useEffect(() => {
 		/*
 			shortest route viewparams:
 			source -> starting node id
@@ -79,8 +82,12 @@ const App = () => {
 		)
 			.then((response) => response.json())
 			.then((data) => setSafestRoute(data))
-	}, [startMarkerCoords, startNearestVertex, endMarkerCoords, endNearestVertex])
+	}, [startNearestVertex, endNearestVertex])
 
+	/*
+		When dragging start marker ends 
+		Get the coordinates and set to state
+	*/
 	const startMarkerRef = useRef(null)
 	const startMarkerEventHandlers = useMemo(
 		() => ({
@@ -94,6 +101,10 @@ const App = () => {
 		[]
 	)
 
+	/*
+		When dragging end marker ends 
+		Get the coordinates and set to state
+	*/
 	const endMarkerRef = useRef(null)
 	const endMarkerEventHandlers = useMemo(
 		() => ({
@@ -107,38 +118,18 @@ const App = () => {
 		[]
 	)
 
+	/*
+		Create a layer for the shortest route
+	*/
 	const ShortestRoute = (props) => {
 		return <GeoJSON data={props.shortestRoute} />
 	}
 
+	/*
+		Create a layer for the safest route
+	*/
 	const SafestRoute = (props) => {
 		return <GeoJSON data={props.safestRoute} style={{ color: "green" }} />
-	}
-
-	// When the input to the form changes update the forms state value
-	const handleChange = (event) => {
-		const { name, value } = event.target
-		setSearchValue((prevSearchValue) => {
-			return {
-				...prevSearchValue,
-				[name]: value
-			}
-		})
-	}
-
-	/*
-		When the form is submitted 
-		Set the form state value to an empty string 
-	*/
-	const handleSubmit = (event) => {
-		event.preventDefault()
-		// Rest form to be empty
-		setSearchValue({
-			startLocation: "",
-			endLocation: ""
-		})
-
-		findStartEndLocation(searchValue.startLocation, searchValue.endLocation)
 	}
 
 	/*
@@ -146,9 +137,9 @@ const App = () => {
 		Query Nominatim and get the coordinates from the searched locations
 		Set the startMarkerCoords and endMarkerCoords to the lat and lng of the searched locations
 	*/
-	const findStartEndLocation = (start, end) => {
+	const handleSearchLocation = (formData) => {
 		fetch(
-			`https://nominatim.openstreetmap.org/search?country=&q=${start}, South Africa&format=geojson`
+			`https://nominatim.openstreetmap.org/search?country=&q=${formData.startLocation}, South Africa&format=geojson`
 		)
 			.then((response) => response.json())
 			.then((data) => {
@@ -161,7 +152,7 @@ const App = () => {
 			})
 
 		fetch(
-			`https://nominatim.openstreetmap.org/search?country=&q=${end}, South Africa&format=geojson`
+			`https://nominatim.openstreetmap.org/search?country=&q=${formData.endLocation}, South Africa&format=geojson`
 		)
 			.then((response) => response.json())
 			.then((data) => {
@@ -176,23 +167,7 @@ const App = () => {
 
 	return (
 		<div>
-			<form onSubmit={handleSubmit}>
-				<input
-					name="startLocation"
-					placeholder="Start Location"
-					type="text"
-					value={searchValue.startLocation}
-					onChange={handleChange}
-				></input>
-				<input
-					name="endLocation"
-					placeholder="End Location"
-					type="text"
-					value={searchValue.endLocation}
-					onChange={handleChange}
-				></input>
-				<input type="submit" value="Find Route"></input>
-			</form>
+			<SearchLocation handleSearchLocation={handleSearchLocation} />
 			<MapContainer ref={setMapState} center={[-25.7487, 28.238]} zoom={15}>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
