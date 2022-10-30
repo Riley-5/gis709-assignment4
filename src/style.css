@@ -1,13 +1,12 @@
 .leaflet-container {
-	height: 98vh;
-	width: 98vw;
+	height: 88vh;
 }
 
 #legend-table {
 	border-collapse: collapse;
 	border: 1px solid black;
 	width: 4vw;
-	height: 20vh;
+	height: 10vh;
 	background-color: white;
 }
 
@@ -22,4 +21,25 @@ th {
 
 .center-text {
 	text-align: center;
+}
+
+#top-bar {
+	display: flex;
+	justify-content: center;
+	gap: 1vw;
+	margin-bottom: 1vh;
+}
+
+#start-end-form {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	width: 25.6vw;
+}
+
+.side-text {
+	width: 35vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
