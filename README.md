@@ -1,8 +1,12 @@
 # Safe Routes
 
+## How to use the app
+
+The application allows a user to pick a start and end location by either searching for a start and end location with the form above the map or by dragging the markers around the map. Once a start and end location have been determined the shortest and safest route between the start and end location will be displayed.
+
 ## Motivation
 
-South Africa has many townships, dangerous roads and areas that are not the safest to be in. A "standard" GPS provides a route based on the shortest distance which may result in the shortest route passing through dangerous areas.
+South Africa has many townships, dangerous roads and areas that are not the safest to be in, a "standard" GPS provides a route based on the shortest distance which may result in the shortest route passing through dangerous areas.
 
 ## Solution
 
@@ -19,7 +23,7 @@ To address this problem the routing can be based on the the safety/danger of the
 - Nominatim
 - Postgres + PostGIS + pgRouting
 
-### How it all works
+### How the tech all works
 
 - Postgres with the PostGIS and pgRouting extention is used to store the spatial data
 - GeoServer is used to serve the spatial data from the database to the frontend
