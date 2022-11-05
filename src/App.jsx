@@ -1,6 +1,12 @@
 import L from "leaflet"
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { GeoJSON, MapContainer, Marker, TileLayer } from "react-leaflet"
+import {
+	GeoJSON,
+	LayersControl,
+	MapContainer,
+	Marker,
+	TileLayer
+} from "react-leaflet"
 import Legend from "./components/Legend"
 import SearchLocation from "./components/SearchLocation"
 import "./style.css"
@@ -31,6 +37,7 @@ const App = () => {
 
 	// State to hold the roads
 	const [mapState, setMapState] = useState(null)
+	const [hatfieldBoundary, setHatfieldBoundary] = useState(null)
 	const [shortestRoute, setShortestRoute] = useState(null)
 	const [safestRoute, setSafestRoute] = useState(null)
 	const [startNearestVertex, setStartNearestVertex] = useState(190)
@@ -46,6 +53,18 @@ const App = () => {
 	const [showErrorMessage, setShowErrorMessage] = useState({
 		errorMessage: false
 	})
+
+	/*
+		Collect the Hatfield boundary from GeoServer 
+		Set the boundary geoJSON to state
+	*/
+	useEffect(() => {
+		fetch(
+			"http://localhost:9090/geoserver/routes/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routes%3Ahatfield_boundary&outputFormat=application%2Fjson"
+		)
+			.then((response) => response.json())
+			.then((data) => setHatfieldBoundary(data))
+	}, [])
 
 	/*
         Collect start and end node from Geoserver
@@ -211,10 +230,22 @@ const App = () => {
 				</div>
 			</div>
 			<MapContainer ref={setMapState} center={[-25.7487, 28.238]} zoom={15}>
-				<TileLayer
-					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-				/>
+				<LayersControl position="topright">
+					<LayersControl.BaseLayer name="OSM" checked={true}>
+						<TileLayer
+							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+						/>
+					</LayersControl.BaseLayer>
+
+					<LayersControl.BaseLayer name="Light">
+						<TileLayer
+							attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+							url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+						/>
+					</LayersControl.BaseLayer>
+				</LayersControl>
+				{hatfieldBoundary ? <GeoJSON data={hatfieldBoundary} /> : null}
 				<ShortestRoute shortestRoute={shortestRoute} />
 				<SafestRoute safestRoute={safestRoute} />
 				<Marker
