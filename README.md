@@ -42,7 +42,10 @@ All items used in stack are open source. The links attached lead you to the down
 
 ### How to Start the App
 Ensure that you have Docker downloaded to your computer.
-https://www.docker.com/products/docker-desktop/
+https://www.docker.com/products/docker-desktop/ 
+
+If you are using a microsoft windows computer make sure to dowload Windows Subsystem for Linux (WSL) as docker runs through WSL on windows. 
+https://learn.microsoft.com/en-us/windows/wsl/install
 
 Navigate to the source folder in the repository (/safe_routes) and execute the following in a terminal.
 
