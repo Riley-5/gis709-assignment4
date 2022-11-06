@@ -44,10 +44,10 @@ All items used in stack are open source. The links attached lead you to the down
 Ensure that you have Docker downloaded to your computer.
 https://www.docker.com/products/docker-desktop/ 
 
-If you are using a microsoft windows computer make sure to dowload Windows Subsystem for Linux (WSL) as docker runs through WSL on windows. 
-https://learn.microsoft.com/en-us/windows/wsl/install
+If you are using a Microsoft Windows computer make sure to dowload Windows Subsystem for Linux (WSL) as docker runs through WSL on windows. To do this, follow the steps set out in this website.
+https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package
 
-Navigate to the source folder in the repository (/safe_routes) and execute the following in a terminal.
+Now open Docker and navigate to the source folder in the repository (/safe_routes) and execute the following in a terminal.
 
 ```bash
 docker compose up
