@@ -2,7 +2,7 @@
 
 ## How to use the app
 
-The application allows a user to pick a start and end location by either searching for a start and end location with the form above the map or by dragging the markers around the map. Once a start and end location have been determined the shortest and safest route between the start and end location will be displayed.
+The application allows a user to pick a start and end location by either searching for a start and end location with the form above the map or by dragging the markers around the map. Once a start and end location have been determined the safest route between the start and end location will be displayed.
 
 ## Motivation
 
