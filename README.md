@@ -6,7 +6,7 @@ The application allows a user to pick a start and end location by either searchi
 
 ## Motivation
 
-South Africa has many townships, dangerous roads and areas that are not the safest to be in, a "standard" GPS provides a route based on the shortest distance which may result in the shortest route passing through dangerous areas.
+South Africa has many townships, dangerous roads and areas that are not safe to be in. A "standard" GPS provides a route based on the shortest distance which may result in the shortest route passing through dangerous areas.
 
 ## Solution
 
