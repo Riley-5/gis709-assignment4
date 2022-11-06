@@ -31,6 +31,7 @@ To address this problem the routing can be based on the the safety/danger of the
 - Leaflet is a mapping library that visually shows the routes that a user requests
 
 ### How to start the app
+Ensure that you have Docker downloaded to your computer.
 
 Navigate to the source folder in the repository (/safe_routes) and execute the following in a terminal
 
