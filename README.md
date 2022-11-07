@@ -39,10 +39,25 @@ Ensure that you have [Docker](https://www.docker.com/products/docker-desktop/) d
 
 If you are using a Microsoft Windows computer make sure to download Windows Subsystem for Linux (WSL) as Docker runs through WSL on Windows. To do this, follow the steps set out in [Learn Microsoft](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package).
 
-Now open Docker and navigate to the source folder in the repository (/safe_routes) and execute the following in a terminal.
+Open a container in Docker by running this.
+```bash
+docker run -d -p 80:80 docker/getting-started
+```
+#### Use the terminal on Docker
+
+Click the ... underneath Actions and select Open in Terminal.
+
+1. Navigate to the source folder in the repository (/gis709-assignment4) 
+
+```bash
+
+```
+2. Execute the following to start all of the necessary services.
 
 ```bash
 docker compose up
 ```
 
-This will start all of the necessary services. Note if there is any service running on port 80 (usually Nginx) on your local machine stop the service (Otherwise localhost in your browser will navigate you to the local port instead of the Docker container port). In a browser go to "localhost" and the application should automatically open.
+Note if there is any service running on port 80 (usually Nginx) on your local machine stop the service (Otherwise localhost in your browser will navigate you to the local port instead of the Docker container port). In a browser go to "localhost" and the application should automatically open.
+
+It may take a few seconds for the database to kick in. 
