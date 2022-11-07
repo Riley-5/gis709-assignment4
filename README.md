@@ -2,11 +2,11 @@
 
 ## Motivation
 
-South Africa has many townships, dangerous roads and areas that are not safe to be in. A "standard" GPS provides a route based on the shortest distance between the start and end location however, this may result in the shortest route passing through dangerous areas. Apps such as Goodle maps and Wayz have managed to incorperate traffic into their routing system but, to our knowledge no one has considered safetey as yet. 
+South Africa has many townships, dangerous roads and areas that are not safe to be in. A "standard" GPS provides a route based on the shortest distance between the start and end location however, this may result in the shortest route passing through dangerous areas. Apps such as Google maps and Wayz have managed to incorperate traffic into their routing system but, to our knowledge no one has considered safetey as yet. 
 
 ## Solution
 
-To address this problem, we have created an application that incorperates saftey into the routing suggestions. The suggested route is based on the the safety/danger of the roads instead of the shortest distance. It uses Diekstra algorithm to determine the safest routes based on the fewest crime incidences. 
+To address this problem, we have created an application that incorperates saftey into the routing suggestions. The suggested route is based on the the safety/danger of the roads instead of the shortest distance. It uses Dijkstra algorithm to determine the safest routes based on the fewest crime incidences. 
 
 ## How to Use the App
 
@@ -20,32 +20,24 @@ The application allows a user to pick a start and end location by either searchi
 
 All items used in stack are open source. The links attached lead you to the download and/ or documentation for each item respectively.  
 
-- PostgreSQL
-  https://www.postgresql.org/
-- PostGIS
-  https://postgis.net/
-- pgRouting
-  https://pgrouting.org/
-- GeoServer
-  https://geoserver.org/
-- Nominatim
-  https://nominatim.org/
-- Leaflet
-  https://leafletjs.com/
+- [PostgreSQL](https://www.postgresql.org/)
+- [PostGIS](https://postgis.net/)
+- [pgRouting](https://pgrouting.org/)
+- [GeoServer](https://geoserver.org/)
+- [Nominatim](https://nominatim.org/)
+- [Leaflet](https://leafletjs.com/)
 
 ### How the Tech Works
 
 - Postgres with the PostGIS and pgRouting extention is used to store the spatial data.
 - GeoServer is used to serve the spatial data from the database to the frontend.
 - Nominatim is an API that provides the locations and coordinates for searched places in Hatfield.
-- Leaflet is a mapping library that visually shows the routes that a user requests.
+- Leaflet is a mapping library that visually shows the routes that the user requests.
 
 ### How to Start the App
-Ensure that you have Docker downloaded to your computer.
-https://www.docker.com/products/docker-desktop/ 
+Ensure that you have [Docker](https://www.docker.com/products/docker-desktop/) downloaded on your computer. 
 
-If you are using a Microsoft Windows computer make sure to dowload Windows Subsystem for Linux (WSL) as docker runs through WSL on windows. To do this, follow the steps set out in this website.
-https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package
+If you are using a Microsoft Windows computer make sure to download Windows Subsystem for Linux (WSL) as Docker runs through WSL on Windows. To do this, follow the steps set out in [Learn Microsoft](https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package).
 
 Now open Docker and navigate to the source folder in the repository (/safe_routes) and execute the following in a terminal.
 
